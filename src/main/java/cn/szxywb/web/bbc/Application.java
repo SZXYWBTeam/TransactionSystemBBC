@@ -24,5 +24,7 @@ public class Application extends ResourceConfig {
         // 注册日志打印输出
         register(Logger.class);
 
+        // 11
+
     }
 }
