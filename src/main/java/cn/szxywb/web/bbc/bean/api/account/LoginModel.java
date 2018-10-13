@@ -9,7 +9,7 @@ public class LoginModel {
     @Expose
     private String password;
     @Expose
-    private String verCode;
+    private String verCode; // 验证码
 
     public String getAccount() {
         return account;

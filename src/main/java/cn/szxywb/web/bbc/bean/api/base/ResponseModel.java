@@ -27,6 +27,14 @@ public class ResponseModel<M> implements Serializable {
     public static final int ERROR_PARAMETERS_EXIST_ACCOUNT = 4002;
     // 请求参数错误-已存在名称
     public static final int ERROR_PARAMETERS_EXIST_NAME = 4003;
+    // 请求参数错误-已存在手机号
+    public static final int ERROR_PARAMETERS_EXIST_PHONE = 4004;
+    // 请求参数错误-已存在支付宝号码
+    public static final int ERROR_PARAMETERS_EXIST_ZFB_CODE = 4005;
+    // 请求参数错误-不存在这个邀请码
+    public static final int ERROR_PARAMETERS_NOT_FOUND_INVITE_CODE = 4006;
+    // 请求参数错误-验证码错误
+    public static final int ERROR_PARAMETERS_ERROR_VER_CODE = 4007;
 
     // 服务器错误
     public static final int ERROR_SERVICE = 5001;
@@ -124,6 +132,22 @@ public class ResponseModel<M> implements Serializable {
 
     public static <M> ResponseModel<M> buildHaveNameError() {
         return new ResponseModel<M>(ERROR_PARAMETERS_EXIST_NAME, "Already have this name.");
+    }
+
+    public static <M> ResponseModel<M> buildHavePhoneError() {
+        return new ResponseModel<M>(ERROR_PARAMETERS_EXIST_PHONE, "Already have this phone.");
+    }
+
+    public static <M> ResponseModel<M> buildHaveZFBCode() {
+        return new ResponseModel<M>(ERROR_PARAMETERS_EXIST_ZFB_CODE, "Already have this zfbCode.");
+    }
+
+    public static <M> ResponseModel<M> buildNotFoundInviteCode() {
+        return new ResponseModel<M>(ERROR_PARAMETERS_NOT_FOUND_INVITE_CODE, "Not Found InviteCode.");
+    }
+
+    public static <M> ResponseModel<M> buildErrorVerCode() {
+        return new ResponseModel<M>(ERROR_PARAMETERS_ERROR_VER_CODE, "Error verCode.");
     }
 
     public static <M> ResponseModel<M> buildServiceError() {
