@@ -4,19 +4,34 @@ import cn.szxywb.web.bbc.bean.api.base.ResponseModel;
 import cn.szxywb.web.bbc.bean.db.User;
 import cn.szxywb.web.bbc.factory.UserFactory;
 import com.google.common.base.Strings;
+import com.google.gson.Gson;
 import org.glassfish.jersey.server.ContainerRequest;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.SecurityContext;
+import javax.ws.rs.ext.Provider;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.StringBufferInputStream;
 import java.security.Principal;
+import java.util.Collection;
+import java.util.Enumeration;
 
 /**
  * 用于所有的请求接口的过滤与拦截
  */
+@Provider
 public class AuthRequestFilter implements ContainerRequestFilter {
+    public static class TokenHolder{
+        public String token ;
+    }
+    @Context
+    HttpServletRequest request ;
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
@@ -30,6 +45,12 @@ public class AuthRequestFilter implements ContainerRequestFilter {
 
         // 从Headers中去找到第一个token节点
         String token = requestContext.getHeaders().getFirst("token");
+        if(Strings.isNullOrEmpty(token)){
+            String par = this.inputStreamToString(requestContext.getEntityStream()) ;
+            requestContext.setEntityStream(new ByteArrayInputStream(par.getBytes("utf-8")));
+            TokenHolder tokenHolder = new Gson().fromJson(par, TokenHolder.class);
+            token = tokenHolder.token ;
+        }
         if (!Strings.isNullOrEmpty(token)) {
             // 查询自己的信息
             User self = UserFactory.findByToken(token);
@@ -68,5 +89,14 @@ public class AuthRequestFilter implements ContainerRequestFilter {
                 .build();
         // 拦截
         requestContext.abortWith(response);
+    }
+
+    public String inputStreamToString(InputStream in) throws IOException {
+        StringBuffer out = new StringBuffer();
+        byte[] b = new byte[4096];
+        for (int n; (n = in.read(b)) != -1;) {
+            out.append(new String(b, 0, n));
+        }
+        return out.toString();
     }
 }

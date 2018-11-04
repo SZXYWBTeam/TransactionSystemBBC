@@ -58,6 +58,9 @@ public class User implements Principal {
     @GenericGenerator(name = "uuid", strategy = "uuid2")
     private String inviteCode;
 
+    @Column
+    private String otherInviteCode; // 其他人的邀请码
+
     // 定义为创建时间戳，在创建时就已经写入
     @CreationTimestamp
     @Column(nullable = false)
@@ -131,6 +134,14 @@ public class User implements Principal {
 
     public void setInviteCode(String inviteCode) {
         this.inviteCode = inviteCode;
+    }
+
+    public String getOtherInviteCode() {
+        return otherInviteCode;
+    }
+
+    public void setOtherInviteCode(String otherInviteCode) {
+        this.otherInviteCode = otherInviteCode;
     }
 
     public LocalDateTime getCreateAt() {

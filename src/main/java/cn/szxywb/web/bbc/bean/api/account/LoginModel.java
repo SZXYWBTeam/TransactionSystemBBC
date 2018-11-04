@@ -10,6 +10,8 @@ public class LoginModel {
     private String password;
     @Expose
     private String verCode; // 验证码
+    @Expose
+    private String verCodeKey;
 
     public String getAccount() {
         return account;
@@ -35,11 +37,20 @@ public class LoginModel {
         this.verCode = verCode;
     }
 
+    public String getVerCodeKey() {
+        return verCodeKey;
+    }
+
+    public void setVerCodeKey(String verCodeKey) {
+        this.verCodeKey = verCodeKey;
+    }
+
     // 参数校验
     public static boolean check(LoginModel model) {
         return model!=null
                 && !Strings.isNullOrEmpty(model.account)
                 && !Strings.isNullOrEmpty(model.password)
-                && !Strings.isNullOrEmpty(model.verCode);
+                && !Strings.isNullOrEmpty(model.verCode)
+                && !Strings.isNullOrEmpty(model.verCodeKey);
     }
 }

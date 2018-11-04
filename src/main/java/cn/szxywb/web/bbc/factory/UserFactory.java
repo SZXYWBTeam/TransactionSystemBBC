@@ -21,7 +21,7 @@ public class UserFactory {
     public static User findByAccount(String account) {
         return Hib.query(session -> (User) session
                 .createQuery("from User where account=:account")
-                .setParameter(account, account)
+                .setParameter("account", account)
                 .uniqueResult());
     }
 
@@ -81,6 +81,14 @@ public class UserFactory {
         return user;
     }
 
+    // 通过用户的邀请码，查找被邀请人的数量
+    public static Long findInviteCountByCode(String code) {
+        return Hib.query(session -> (Long) session
+                .createQuery("select count(*) from User where otherInviteCode=:code")
+                .setParameter("code", code)
+                .uniqueResult());
+    }
+
     /**
      * 用户注册
      *
@@ -89,13 +97,13 @@ public class UserFactory {
      * @param name     用户名
      * @return User
      */
-    public static User register(String account, String password, String phone, String name, String zfbCode) {
+    public static User register(String account, String password, String phone, String name, String zfbCode, String otherInviteCode) {
         // 去除账户中的首位空格
         account = account.trim();
         // 处理密码
         password = encodePassword(password);
 
-        User user = createUser(account, password, phone, name, zfbCode, encodeInviteCode(LocalDateTime.now().toString()));
+        User user = createUser(account, password, phone, name, zfbCode, encodeInviteCode(LocalDateTime.now().toString()), otherInviteCode);
         if (user != null) {
             user = login(user);
         }
@@ -111,7 +119,7 @@ public class UserFactory {
      * @param name     name
      * @return User
      */
-    private static User createUser(String account, String password, String phone, String name, String zfbCode, String inviteCode) {
+    private static User createUser(String account, String password, String phone, String name, String zfbCode, String inviteCode, String otherInviteCode) {
         User user = new User();
 
         user.setAccount(account);
@@ -120,6 +128,7 @@ public class UserFactory {
         user.setName(name);
         user.setZfbCode(zfbCode);
         user.setInviteCode(inviteCode);
+        user.setOtherInviteCode(otherInviteCode);
 
         return Hib.query(session -> {
             session.save(user);
@@ -156,7 +165,7 @@ public class UserFactory {
         });
     }
 
-    private static String encodePassword(String passWord) {
+    public static String encodePassword(String passWord) {
         passWord = passWord.trim();
 
         passWord = TextUtil.getMD5(passWord);

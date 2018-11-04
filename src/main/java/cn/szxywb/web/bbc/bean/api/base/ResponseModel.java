@@ -35,6 +35,8 @@ public class ResponseModel<M> implements Serializable {
     public static final int ERROR_PARAMETERS_NOT_FOUND_INVITE_CODE = 4006;
     // 请求参数错误-验证码错误
     public static final int ERROR_PARAMETERS_ERROR_VER_CODE = 4007;
+    // 请求参数错误-原密码错误
+    public static final int ERROR_PARAMETERS_ERROR_OLD_PWD = 4008;
 
     // 服务器错误
     public static final int ERROR_SERVICE = 5001;
@@ -148,6 +150,10 @@ public class ResponseModel<M> implements Serializable {
 
     public static <M> ResponseModel<M> buildErrorVerCode() {
         return new ResponseModel<M>(ERROR_PARAMETERS_ERROR_VER_CODE, "Error verCode.");
+    }
+
+    public static <M> ResponseModel<M> buildErrorOldPwd() {
+        return new ResponseModel<M>(ERROR_PARAMETERS_ERROR_OLD_PWD, "Error oldPwd.");
     }
 
     public static <M> ResponseModel<M> buildServiceError() {

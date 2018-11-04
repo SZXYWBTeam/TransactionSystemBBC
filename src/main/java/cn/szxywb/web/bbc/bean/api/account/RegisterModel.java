@@ -18,6 +18,8 @@ public class RegisterModel {
     private String otherInviteCode; // 其他人的邀请码
     @Expose
     private String verCode; // 验证码
+    @Expose
+    private String verCodeKey;
 
     public String getAccount() {
         return account;
@@ -75,6 +77,14 @@ public class RegisterModel {
         this.verCode = verCode;
     }
 
+    public String getVerCodeKey() {
+        return verCodeKey;
+    }
+
+    public void setVerCodeKey(String verCodeKey) {
+        this.verCodeKey = verCodeKey;
+    }
+
     // 参数校验
     public static boolean check(RegisterModel model) {
         return model!=null
@@ -83,6 +93,7 @@ public class RegisterModel {
                 && !Strings.isNullOrEmpty(model.phone)
                 && !Strings.isNullOrEmpty(model.name)
                 && !Strings.isNullOrEmpty(model.zfbCode)
-                && !Strings.isNullOrEmpty(model.verCode);
+                && !Strings.isNullOrEmpty(model.verCode)
+                && !Strings.isNullOrEmpty(model.verCodeKey);
     }
 }
