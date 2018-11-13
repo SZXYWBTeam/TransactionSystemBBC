@@ -85,7 +85,7 @@ public class TransService extends BaseService {
         transList.forEach(trans -> trans.setSellTransId(mineTrans.getId()));
         transList.add(mineTrans);
         // 修改双方订单状态
-        transList.forEach(trans -> trans.setStatus(Transaction.TRANSACTION_STATUS_MATCH_AFTER));
+//        transList.forEach(trans -> trans.setStatus(Transaction.TRANSACTION_STATUS_MATCH_AFTER));
         transList = TransactionFactory.updateList(transList);
         if (transList == null)
             return ResponseModel.buildServiceError();
@@ -95,13 +95,13 @@ public class TransService extends BaseService {
         mineTrans.setSellers(sellers);
 
         List<Transaction> transBuy = TransactionFactory.findBySellTransId(mineTrans.getId());
-        List<User> buyers = transBuy.stream()
+       /* List<User> buyers = transBuy.stream()
                 .map(trans -> {
                     trans.setStatus(Transaction.TRANSACTION_STATUS_MATCH_AFTER);
                     return UserFactory.findById(trans.getBuyerId());
                 })
-                .collect(Collectors.toList());
-        mineTrans.setBuyers(buyers);
+                .collect(Collectors.toList());*/
+//        mineTrans.setBuyers(buyers);
         return ResponseModel.buildOk(new TransactionCard(mineTrans));
     }
 
@@ -132,9 +132,11 @@ public class TransService extends BaseService {
             return ResponseModel.buildParameterError();
 
         transList.forEach(trans -> trans.setSellTransId(mineTrans.getId()));
+        // 修改买方为待付款
+        transList.forEach(trans -> trans.setStatus(Transaction.TRANSACTION_STATUS_PAY_PRE));
+        // 修改卖方为待收款
+        mineTrans.setStatus(Transaction.TRANSACTION_STATUS_RECIVE_PRE);
         transList.add(mineTrans);
-        // 修改双方订单状态为已匹配
-        transList.forEach(trans -> trans.setStatus(Transaction.TRANSACTION_STATUS_MATCH_AFTER));
         transList = TransactionFactory.updateList(transList);
         if (transList == null)
             return ResponseModel.buildServiceError();
@@ -167,15 +169,15 @@ public class TransService extends BaseService {
 
         // 修改双方交易人的账户金额
         // 买家打款
-        Wallet buyerWallet = WalletFactory.findByUserId(mineTrans.getBuyerId());
-        buyerWallet.setCurrency(buyerWallet.getCurrency() - mineTrans.getCurrency());
+        //Wallet buyerWallet = WalletFactory.findByUserId(mineTrans.getBuyerId());
+        //buyerWallet.setCurrency(buyerWallet.getCurrency() - mineTrans.getCurrency());
         // 卖家增加金额
         Transaction sellerTrans = TransactionFactory.findById(mineTrans.getSellTransId());
         Wallet sellerWallet = WalletFactory.findByUserId(sellerTrans.getSellerId());
         sellerWallet.setCurrency(sellerWallet.getCurrency() + mineTrans.getCurrency());
 
         // 保存数据
-        WalletFactory.update(buyerWallet);
+        //WalletFactory.update(buyerWallet);
         WalletFactory.update(sellerWallet);
 
         return ResponseModel.buildOk();

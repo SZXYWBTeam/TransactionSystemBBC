@@ -17,10 +17,7 @@ import javax.ws.rs.ext.Provider;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.StringBufferInputStream;
 import java.security.Principal;
-import java.util.Collection;
-import java.util.Enumeration;
 
 /**
  * 用于所有的请求接口的过滤与拦截

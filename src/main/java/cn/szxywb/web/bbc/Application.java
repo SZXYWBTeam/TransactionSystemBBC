@@ -22,6 +22,9 @@ public class Application extends ResourceConfig {
         register(JacksonJsonProvider.class);
         register(GsonProvider.class);
 
+        // 注册图片上传
+        // register(MultiPartFeature.class);
+
         // 注册日志打印输出
         register(Logger.class);
     }

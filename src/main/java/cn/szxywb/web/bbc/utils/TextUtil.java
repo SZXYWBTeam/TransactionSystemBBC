@@ -43,6 +43,10 @@ public class TextUtil {
         return Base64.getEncoder().encodeToString(str.getBytes());
     }
 
+    public static String encodeBase64(byte[] bytes) {
+        return Base64.getEncoder().encodeToString(bytes);
+    }
+
     /**
      * 把任意类的实例转换为Json字符串
      *

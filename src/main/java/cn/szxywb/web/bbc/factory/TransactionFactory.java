@@ -19,7 +19,7 @@ public class TransactionFactory {
 
     public static List<Transaction> updateList(List<Transaction> trans) {
         return Hib.query(session -> {
-            trans.forEach(session::saveOrUpdate);
+            trans.forEach(session::update);
             return trans;
         });
     }

@@ -18,7 +18,6 @@ import java.util.List;
 @Table(name = "TB_TRANSACTION")
 public class Transaction {
 
-    public static final Integer TRANSACTION_STATUS_MATCH_AFTER = 0;
     public static final Integer TRANSACTION_STATUS_MATCH_PRE = -1;
     public static final Integer TRANSACTION_STATUS_OVER = 1;
 
@@ -70,6 +69,9 @@ public class Transaction {
 
     @Column
     private String sellTransId;
+
+    @Column
+    private String imgSrc;
 
     // 定义为创建时间戳，在创建时就已经写入
     @CreationTimestamp
@@ -191,6 +193,14 @@ public class Transaction {
 
     public void setSellerId(String sellerId) {
         this.sellerId = sellerId;
+    }
+
+    public String getImgSrc() {
+        return imgSrc;
+    }
+
+    public void setImgSrc(String imgSrc) {
+        this.imgSrc = imgSrc;
     }
 
     public String getSellTransId() {
